@@ -14,7 +14,7 @@ Add functionality to your script to return the stock with the "Greatest % increa
 
 Make the appropriate adjustments to your VBA script to enable it to run on every worksheet (that is, every year) at once.
 
-**Note **
+**Note**
 Make sure to use conditional formatting that will highlight positive change in green and negative change in red.
 
 
