@@ -1,0 +1,92 @@
+'Module 2 Challenge
+Sub challenge_vba():
+
+Dim ws As Worksheet
+
+' Loop through all of the worksheets in the active workbook.
+For Each ws In worksheets
+
+    ws.Range("I1, O1").Value = "ticker"
+    ws.Range("J1").Value = "yearly  change"
+    ws.Range("K1").Value = "percent change"
+    ws.Range("L1").Value = "total stock volume"
+    RowCount = ws.Cells(Rows.Count, "A").End(xlUp).Row
+    
+    ws.Range("N2").Value = "greatest % increase"
+    ws.Range("N3").Value = "greatest % decrease"
+    ws.Range("N4").Value = "greatest total volume"
+    ws.Range("P1").Value = "value"
+
+' Define variables
+    Dim ticker As String
+    
+    Dim total_volume As Double
+    total_volume = 0
+    
+    Dim change As Double
+    change = 0
+    
+    Dim percent_change As Double
+    percent_change = 0
+   
+    Dim Summary_Table_Row As Double
+    Summary_Table_Row = 2
+    
+    Dim open_price_row As Double
+    open_price_row = 2
+      
+' Loop through all rows
+    For i = 2 To RowCount
+
+' Check if we are still within the same ticker, if not...
+    If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+' Set variables
+    ticker = ws.Cells(i, 1).Value
+    total_volume = total_volume + ws.Cells(i, 7).Value
+    closing_price = ws.Cells(i, 6).Value
+    opening_price = ws.Cells(open_price_row, 3).Value
+    change = closing_price - opening_price
+    percent_change = change / opening_price
+
+' Print the variables in required headers
+    ws.Range("I" & Summary_Table_Row).Value = ticker
+    ws.Range("J" & Summary_Table_Row).Value = change
+    ws.Range("J" & Summary_Table_Row).NumberFormat = "0.00"
+    ws.Range("K" & Summary_Table_Row).Value = percent_change
+    ws.Range("K" & Summary_Table_Row).NumberFormat = "0.00%"
+     
+' Print the total volume and conditional format
+    ws.Range("L" & Summary_Table_Row).Value = total_volume
+        If change > 0 Then
+            ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
+         
+            Else
+                ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 3
+               
+        End If
+        
+' Add one to the summary table row
+    Summary_Table_Row = Summary_Table_Row + 1
+      
+' Reset the totals
+    total_volume = 0
+    change = 0
+    open_price_row = i + 1
+      
+
+' If the cell immediately following a row is the same
+    Else
+    
+        ' Add to the total volume
+        total_volume = total_volume + ws.Cells(i, 7).Value
+
+    End If
+
+  Next i
+
+    Next ws
+
+        
+End Sub
+
